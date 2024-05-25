@@ -17,7 +17,7 @@
 package api
 
 import (
-	quality "k8s.io/apimachinery/pkg/api/equality"
+	"reflect"
 	"testing"
 
 	v1 "k8s.io/api/core/v1"
@@ -29,7 +29,7 @@ import (
 )
 
 func nodeInfoEqual(l, r *NodeInfo) bool {
-	return quality.Semantic.DeepEqual(l, r)
+	return reflect.DeepEqual(l, r)
 }
 
 func TestNodeInfo_AddPod(t *testing.T) {

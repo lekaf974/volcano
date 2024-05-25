@@ -19,6 +19,7 @@ package cache
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"testing"
 	"time"
 
@@ -201,7 +202,7 @@ func TestSchedulerCache_Bind_NodeWithInsufficientResources(t *testing.T) {
 	}
 
 	nodeAfterBind := cache.Nodes["n1"].Clone()
-	if !quality.Semantic.DeepEqual(nodeBeforeBind, nodeAfterBind) {
+	if !reflect.DeepEqual(nodeBeforeBind, nodeAfterBind) {
 		t.Errorf("expected node to remain the same after failed bind")
 	}
 }
@@ -289,14 +290,14 @@ func TestNodeOperation(t *testing.T) {
 			cache.AddOrUpdateNode(n)
 		}
 
-		if !quality.Semantic.DeepEqual(cache, test.expected) {
+		if !reflect.DeepEqual(cache, test.expected) {
 			t.Errorf("case %d: \n expected %v, \n got %v \n",
 				i, test.expected, cache)
 		}
 
 		// delete node
 		cache.RemoveNode(test.deletedNode.Name)
-		if !quality.Semantic.DeepEqual(cache, test.delExpect) {
+		if !reflect.DeepEqual(cache, test.delExpect) {
 			t.Errorf("case %d: \n expected %v, \n got %v \n",
 				i, test.delExpect, cache)
 		}
