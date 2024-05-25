@@ -17,8 +17,9 @@ limitations under the License.
 package framework
 
 import (
-	"reflect"
 	"testing"
+
+	quality "k8s.io/apimachinery/pkg/api/equality"
 
 	"volcano.sh/volcano/pkg/scheduler/conf"
 )
@@ -181,7 +182,7 @@ func TestGetArgOfActionFromConf(t *testing.T) {
 
 	for index, c := range cases {
 		arg := GetArgOfActionFromConf(c.configurations, c.action)
-		if false == reflect.DeepEqual(arg, c.expectedArguments) {
+		if false == quality.Semantic.DeepEqual(arg, c.expectedArguments) {
 			t.Errorf("index %d, case %s,expected %v, but got %v", index, c.name, c.expectedArguments, arg)
 		}
 	}

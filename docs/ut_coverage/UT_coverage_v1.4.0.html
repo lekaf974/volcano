@@ -4005,7 +4005,7 @@ func (cc *jobcontroller) createOrUpdatePodGroup(job *batch.Job) error <span clas
         }</span>
 
         <span class="cov8" title="1">minResources := cc.calcPGMinResources(job)
-        if pg.Spec.MinMember != job.Spec.MinAvailable || !reflect.DeepEqual(pg.Spec.MinResources, minResources) </span><span class="cov0" title="0">{
+        if pg.Spec.MinMember != job.Spec.MinAvailable || !quality.Semantic.DeepEqual(pg.Spec.MinResources, minResources) </span><span class="cov0" title="0">{
                 pg.Spec.MinMember = job.Spec.MinAvailable
                 pg.Spec.MinResources = minResources
                 pgShouldUpdate = true
@@ -4269,7 +4269,7 @@ func (cc *jobcontroller) updateJob(oldObj, newObj interface{}) <span class="cov8
 
         // NOTE: Since we only reconcile job based on Spec, we will ignore other attributes
         // For Job status, it's used internally and always been updated via our controller.
-        <span class="cov8" title="1">if reflect.DeepEqual(newJob.Spec, oldJob.Spec) &amp;&amp; newJob.Status.State.Phase == oldJob.Status.State.Phase </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if quality.Semantic.DeepEqual(newJob.Spec, oldJob.Spec) &amp;&amp; newJob.Status.State.Phase == oldJob.Status.State.Phase </span><span class="cov0" title="0">{
                 klog.V(6).Infof("Job update event is ignored since no update in 'Spec'.")
                 return
         }</span>
@@ -6097,7 +6097,7 @@ func (c *queuecontroller) syncQueue(queue *schedulingv1beta1.Queue, updateStateF
         }</span>
 
         // ignore update when status does not change
-        <span class="cov8" title="1">if reflect.DeepEqual(queueStatus, queue.Status) </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if quality.Semantic.DeepEqual(queueStatus, queue.Status) </span><span class="cov0" title="0">{
                 return nil
         }</span>
 
@@ -12437,7 +12437,7 @@ func isPodGroupConditionsUpdated(newCondition, oldCondition []scheduling.PodGrou
                 newTransitionID := newCond.TransitionID
                 newCond.TransitionID = oldCond.TransitionID
 
-                shouldUpdate := !reflect.DeepEqual(&amp;newCond, &amp;oldCond)
+                shouldUpdate := !quality.Semantic.DeepEqual(&amp;newCond, &amp;oldCond)
 
                 newCond.LastTransitionTime = newTime
                 newCond.TransitionID = newTransitionID
@@ -12455,7 +12455,7 @@ func isPodGroupStatusUpdated(newStatus, oldStatus scheduling.PodGroupStatus) boo
         oldCondition := oldStatus.Conditions
         oldStatus.Conditions = nil
 
-        return !reflect.DeepEqual(newStatus, oldStatus) || isPodGroupConditionsUpdated(newCondition, oldCondition)
+        return !quality.Semantic.DeepEqual(newStatus, oldStatus) || isPodGroupConditionsUpdated(newCondition, oldCondition)
 }</span>
 
 // updateJob update specified job

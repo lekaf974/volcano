@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 
 	"volcano.sh/apis/pkg/apis/scheduling/v1beta1"
 
 	"github.com/spf13/cobra"
 
+	quality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -71,7 +71,7 @@ func TestDeleteQueue(t *testing.T) {
 		deleteQueueFlags.Name = testCase.QueueName
 
 		err := DeleteQueue()
-		if false == reflect.DeepEqual(err, testCase.ExpectValue) {
+		if false == quality.Semantic.DeepEqual(err, testCase.ExpectValue) {
 			t.Errorf("Case '%s' failed, expected: '%v', got '%v'", testCase.Name, testCase.ExpectValue, err)
 		}
 	}

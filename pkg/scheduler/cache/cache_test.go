@@ -19,11 +19,11 @@ package cache
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"testing"
 	"time"
 
 	v1 "k8s.io/api/core/v1"
+	quality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/record"
@@ -196,12 +196,12 @@ func TestSchedulerCache_Bind_NodeWithInsufficientResources(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected to find task after failed bind")
 	}
-	if !reflect.DeepEqual(taskBeforeBind, taskAfterBind) {
+	if !quality.Semantic.DeepEqual(taskBeforeBind, taskAfterBind) {
 		t.Errorf("expected task to remain the same after failed bind: \n %#v\n %#v", taskBeforeBind, taskAfterBind)
 	}
 
 	nodeAfterBind := cache.Nodes["n1"].Clone()
-	if !reflect.DeepEqual(nodeBeforeBind, nodeAfterBind) {
+	if !quality.Semantic.DeepEqual(nodeBeforeBind, nodeAfterBind) {
 		t.Errorf("expected node to remain the same after failed bind")
 	}
 }
@@ -289,14 +289,14 @@ func TestNodeOperation(t *testing.T) {
 			cache.AddOrUpdateNode(n)
 		}
 
-		if !reflect.DeepEqual(cache, test.expected) {
+		if !quality.Semantic.DeepEqual(cache, test.expected) {
 			t.Errorf("case %d: \n expected %v, \n got %v \n",
 				i, test.expected, cache)
 		}
 
 		// delete node
 		cache.RemoveNode(test.deletedNode.Name)
-		if !reflect.DeepEqual(cache, test.delExpect) {
+		if !quality.Semantic.DeepEqual(cache, test.delExpect) {
 			t.Errorf("case %d: \n expected %v, \n got %v \n",
 				i, test.delExpect, cache)
 		}

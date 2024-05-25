@@ -18,9 +18,9 @@ package tasktopology
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
+	quality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"volcano.sh/apis/pkg/apis/scheduling"
@@ -377,10 +377,10 @@ func Test_readTopologyFromPgAnnotations(t *testing.T) {
 		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
 			t.Logf("case: %s", c.description)
 			topology, err := readTopologyFromPgAnnotations(c.job)
-			if !reflect.DeepEqual(err, c.err) {
+			if !quality.Semantic.DeepEqual(err, c.err) {
 				t.Errorf("want %v ,got %v", c.err, err)
 			}
-			if !reflect.DeepEqual(topology, c.topology) {
+			if !quality.Semantic.DeepEqual(topology, c.topology) {
 				t.Errorf("want %v ,got %v", c.topology, topology)
 			}
 		})
